@@ -10,7 +10,7 @@ namespace Editors
         {
             base.OnInspectorGUI();
             if (GUILayout.Button("Create"))
-                ((ShadowCastingUnion)target).Create();
+                ((ShadowCastingUnion) target).Create();
         }
     }
 }

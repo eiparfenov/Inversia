@@ -1,3 +1,12 @@
 fileFormatVersion: 2
 guid: 39c1ded0da33445a96413c75e24f3525
-timeCreated: 1647175336
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - tempMarker: {fileID: 4902414129484917482, guid: 5eac1639add15b74183d19c43c5e063c, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

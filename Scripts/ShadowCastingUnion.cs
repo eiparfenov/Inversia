@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ShadowCastingUnion : MonoBehaviour
 {
     [SerializeField] private Transform lightSource;
-    private List<ShadowCastingObject> _shadowCastingObjects;
-    private GameObject _shadowCollidersParent;
+    [SerializeField] [HideInInspector] private List<ShadowCastingObject> shadowCastingObjects;
+    [SerializeField] [HideInInspector] private GameObject shadowCollidersParent;
 
     public void Create()
     {
@@ -17,23 +18,23 @@ public class ShadowCastingUnion : MonoBehaviour
             return;
         }
         
-        if (_shadowCollidersParent)
-            DestroyImmediate(_shadowCollidersParent);
+        if (shadowCollidersParent)
+            DestroyImmediate(shadowCollidersParent);
 
-        _shadowCollidersParent = new GameObject("Shadow colliders for " + gameObject.name);
+        shadowCollidersParent = new GameObject("Shadow colliders for " + gameObject.name);
         
-        _shadowCastingObjects = new List<ShadowCastingObject>();
+        shadowCastingObjects = new List<ShadowCastingObject>();
         for (int childNumber = 0; childNumber < transform.childCount; childNumber++)
         {
             Transform child = transform.GetChild(childNumber);
             
             ShadowCastingObject childShadowCastingObject = child.GetComponent<ShadowCastingObject>();
             if (!childShadowCastingObject)
-                child.gameObject.AddComponent<ShadowCastingObject>();
-            _shadowCastingObjects.Add(childShadowCastingObject);
+                childShadowCastingObject = child.gameObject.AddComponent<ShadowCastingObject>();
+            shadowCastingObjects.Add(childShadowCastingObject);
             
             GameObject shadowColliderGameObject = new GameObject("Shadow(" + childNumber + ")");
-            shadowColliderGameObject.transform.parent = _shadowCollidersParent.transform;
+            shadowColliderGameObject.transform.parent = shadowCollidersParent.transform;
             ShadowCollider shadowCollider = shadowColliderGameObject.AddComponent<ShadowCollider>();
             
             childShadowCastingObject.AppliedShadowCollider = shadowCollider;
@@ -44,17 +45,12 @@ public class ShadowCastingUnion : MonoBehaviour
 
     public void RenderShadows()
     {
-        foreach (var shadowCastingObject in _shadowCastingObjects)
+        foreach (var shadowCastingObject in shadowCastingObjects)
         {
             shadowCastingObject.RenderShadow();
         }
     }
-
-    private void Start()
-    {
-        Create();
-    }
-
+    
     private void Update()
     {
         RenderShadows();

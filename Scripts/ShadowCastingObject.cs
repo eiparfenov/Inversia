@@ -2,39 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ShadowCastingObject : MonoBehaviour
 {
-    private Vector3[] _meshOffsets;
-    private Transform _lightSource;
-    private ShadowCollider _appliedShadowCollider;
+    [SerializeField] [HideInInspector] private Vector3[] meshOffsets;
+    [SerializeField] [HideInInspector] private Transform lightSource;
+    [SerializeField] [HideInInspector] private ShadowCollider appliedShadowCollider;
 
     public ShadowCollider AppliedShadowCollider
     {
-        get => _appliedShadowCollider;
-        set => _appliedShadowCollider = value;
+        get => appliedShadowCollider;
+        set => appliedShadowCollider = value;
     }
     public Transform LightSource
     {
-        get => _lightSource;
-        set => _lightSource = value;
+        get => lightSource;
+        set => lightSource = value;
     }
 
     public void RecalculateMesh()
     {
-        _meshOffsets = (Vector3[])GetComponent<MeshFilter>().mesh.vertices.Distinct();
+        meshOffsets = GetComponent<MeshFilter>().sharedMesh.vertices.Distinct().ToArray();
     }
 
     public void RenderShadow()
     {
         // transforms mesh vertexes in world space
-        Vector3[] meshVertexesInWorldSpace = new Vector3[_meshOffsets.Length];
-        for (int i = 0; i < _meshOffsets.Length; i++)
+        Vector3[] meshVertexesInWorldSpace = new Vector3[meshOffsets.Length];
+        for (int i = 0; i < meshOffsets.Length; i++)
         {
-            meshVertexesInWorldSpace[i] = transform.TransformPoint(_meshOffsets[i]);
+            meshVertexesInWorldSpace[i] = transform.TransformPoint(meshOffsets[i]);
         }
 
         // recalculates shadow
-        _appliedShadowCollider.RecalculateShadow(meshVertexesInWorldSpace, _lightSource.position);
+        appliedShadowCollider.RecalculateShadow(meshVertexesInWorldSpace, lightSource.position);
     }
 }

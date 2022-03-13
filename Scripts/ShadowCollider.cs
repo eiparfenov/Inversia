@@ -43,7 +43,7 @@ public class ShadowCollider : MonoBehaviour
     {
         for (int childNumber = 0; childNumber < transform.childCount; childNumber++)
         {
-            Destroy(transform.GetChild(0).gameObject);
+            Destroy(transform.GetChild(childNumber).gameObject);
         }
 
         foreach (var point in pointsToDisplay)
