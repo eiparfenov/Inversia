@@ -6,6 +6,17 @@ using UnityEngine;
 public class ShadowCollider : MonoBehaviour
 {
     private PolygonCollider2D _appliedPolygonCollider;
+    private MeshFilter _appliedMeshFilter;
+
+    private MeshFilter AppliedMeshFilter
+    {
+        get
+        {
+            if (!_appliedMeshFilter)
+                _appliedMeshFilter = GetComponent<MeshFilter>();
+            return _appliedMeshFilter;
+        }
+    }
     private PolygonCollider2D AppliedPolygonCollider
     {
         get
@@ -25,6 +36,7 @@ public class ShadowCollider : MonoBehaviour
         {
             UpdateCollider(shadowPoints);
             TempDisplay(shadowPoints);
+            UpdateMesh(shadowPoints);
         }
     }
     private Vector3[] ProjectPointsOnPlane(Vector3[] meshVertexesPositions, Vector3 lightSourcePosition)
@@ -120,6 +132,39 @@ public class ShadowCollider : MonoBehaviour
 
         AppliedPolygonCollider.SetPath(0, path);
     }
+
+    private void UpdateMesh(Vector3[] points)
+    {
+        Vector3 center = Vector3.zero;
+        foreach (Vector3 pointOnPlane in points)
+        {
+            center += pointOnPlane;
+        }
+        center /= points.Length;
+            
+        // Create points array
+        List<Vector3> meshPoints = new List<Vector3>();
+        meshPoints.Add(center);
+        meshPoints.AddRange(points);
+            
+        // Create triangles array
+        int[] triangles = new int[points.Length * 3];
+        for (int i = 0; i < points.Length; i++)
+        {
+            triangles[i * 3] = 0;
+            triangles[i * 3 + 2] = i + 1;
+            triangles[i * 3 + 1] = (i + 1) % points.Length + 1;
+        }
+
+        // Create new mesh
+        Mesh newMesh = new Mesh();
+        newMesh.vertices = meshPoints.ToArray();
+        newMesh.triangles = triangles;
+            
+        // Apply new mesh to mesh filter
+
+        AppliedMeshFilter.mesh = newMesh;
+    }
     private void TempDisplay(Vector3[] pointsToDisplay)
     {
         for (int childNumber = 0; childNumber < transform.childCount; childNumber++)
@@ -132,25 +177,24 @@ public class ShadowCollider : MonoBehaviour
             Instantiate(tempMarker, point, Quaternion.identity, transform);
         }
     }
-    
 }
 class PairForConvexHull: IComparable
 {
-    private float angle;
-    private Vector3 point;
+    private float _angle;
+    private Vector3 _point;
 
     public PairForConvexHull(float angle, Vector3 point)
     {
-        this.angle = angle;
-        this.point = point;
+        this._angle = angle;
+        this._point = point;
     }
 
-    public Vector3 Point { get => point; set => point = value; }
-    public float Angle { get => angle; set => angle = value; }
+    public Vector3 Point { get => _point; set => _point = value; }
+    public float Angle { get => _angle; set => _angle = value; }
 
     public int CompareTo(object obj)
     {
-        if (((PairForConvexHull)obj).Angle < angle)
+        if (((PairForConvexHull)obj).Angle < _angle)
             return -1;
         else
             return 1;
