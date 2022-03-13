@@ -27,8 +27,8 @@ public class ShadowCastingObject : MonoBehaviour
         {
             meshVertexesInWorldSpace[i] = transform.TransformPoint(_meshOffsets[i]);
         }
-        
+
         // recalculates shadow
-        
+
     }
 }
