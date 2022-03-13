@@ -2,17 +2,31 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[RequireComponent(typeof(PolygonCollider2D))]
 public class ShadowCollider : MonoBehaviour
 {
+    private PolygonCollider2D _appliedPolygonCollider;
+    private PolygonCollider2D AppliedPolygonCollider
+    {
+        get
+        {
+            if (!_appliedPolygonCollider)
+                _appliedPolygonCollider = GetComponent<PolygonCollider2D>();
+            return _appliedPolygonCollider;
+        }
+    }
+
     [SerializeField] private GameObject tempMarker;
     public void RecalculateShadow(Vector3[] meshVertexesPositions, Vector3 lightSourcePosition)
     {
         Vector3[] pointsProjections = ProjectPointsOnPlane(meshVertexesPositions, lightSourcePosition);
         Vector3[] shadowPoints = ConvexHull(pointsProjections);
-        TempDisplay(shadowPoints);
+        if (shadowPoints.Length >= 3)
+        {
+            UpdateCollider(shadowPoints);
+            TempDisplay(shadowPoints);
+        }
     }
-
     private Vector3[] ProjectPointsOnPlane(Vector3[] meshVertexesPositions, Vector3 lightSourcePosition)
     {
         Vector3[] meshVertexesLocalPositions = new Vector3[meshVertexesPositions.Length];
@@ -96,7 +110,16 @@ public class ShadowCollider : MonoBehaviour
             return result.ToArray();
 
         }
+    private void UpdateCollider(Vector3[] points)
+    {
+        Vector2[] path = new Vector2[points.Length];
+        for (int i = 0; i < path.Length; i++)
+        {
+            path[i] = points[i];
+        }
 
+        AppliedPolygonCollider.SetPath(0, path);
+    }
     private void TempDisplay(Vector3[] pointsToDisplay)
     {
         for (int childNumber = 0; childNumber < transform.childCount; childNumber++)
