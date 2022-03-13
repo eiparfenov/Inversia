@@ -7,6 +7,11 @@ using UnityEngine.Serialization;
 public class ShadowCastingUnion : MonoBehaviour
 {
     [SerializeField] private Transform lightSource;
+    public Transform LightSource
+    {
+        get => lightSource;
+        set => lightSource = value;
+    }
     [SerializeField] [HideInInspector] private List<ShadowCastingObject> shadowCastingObjects;
     [SerializeField] [HideInInspector] private GameObject shadowCollidersParent;
 
@@ -22,6 +27,7 @@ public class ShadowCastingUnion : MonoBehaviour
             DestroyImmediate(shadowCollidersParent);
 
         shadowCollidersParent = new GameObject("Shadow colliders for " + gameObject.name);
+        shadowCollidersParent.transform.parent = transform.parent;
         
         shadowCastingObjects = new List<ShadowCastingObject>();
         for (int childNumber = 0; childNumber < transform.childCount; childNumber++)
