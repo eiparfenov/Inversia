@@ -7,6 +7,7 @@ public class ShadowCastingUnion : MonoBehaviour
 {
     [SerializeField] private Transform lightSource;
     private List<ShadowCastingObject> _shadowCastingObjects;
+    private GameObject _shadowCollidersParent;
 
     public void Create()
     {
@@ -15,6 +16,11 @@ public class ShadowCastingUnion : MonoBehaviour
             Debug.LogWarning("Add light source to " + gameObject.name + " shadow casting union!!!");
             return;
         }
+        
+        if (_shadowCollidersParent)
+            DestroyImmediate(_shadowCollidersParent);
+
+        _shadowCollidersParent = new GameObject("Shadow colliders for " + gameObject.name);
         
         _shadowCastingObjects = new List<ShadowCastingObject>();
         for (int childNumber = 0; childNumber < transform.childCount; childNumber++)
@@ -26,6 +32,11 @@ public class ShadowCastingUnion : MonoBehaviour
                 child.gameObject.AddComponent<ShadowCastingObject>();
             _shadowCastingObjects.Add(childShadowCastingObject);
             
+            GameObject shadowColliderGameObject = new GameObject("Shadow(" + childNumber + ")");
+            shadowColliderGameObject.transform.parent = _shadowCollidersParent.transform;
+            ShadowCollider shadowCollider = shadowColliderGameObject.AddComponent<ShadowCollider>();
+            
+            childShadowCastingObject.AppliedShadowCollider = shadowCollider;
             childShadowCastingObject.LightSource = lightSource;
             childShadowCastingObject.RecalculateMesh();
         }

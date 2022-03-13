@@ -7,7 +7,13 @@ public class ShadowCastingObject : MonoBehaviour
 {
     private Vector3[] _meshOffsets;
     private Transform _lightSource;
+    private ShadowCollider _appliedShadowCollider;
 
+    public ShadowCollider AppliedShadowCollider
+    {
+        get => _appliedShadowCollider;
+        set => _appliedShadowCollider = value;
+    }
     public Transform LightSource
     {
         get => _lightSource;
@@ -29,6 +35,6 @@ public class ShadowCastingObject : MonoBehaviour
         }
 
         // recalculates shadow
-
+        _appliedShadowCollider.RecalculateShadow(meshVertexesInWorldSpace, _lightSource.position);
     }
 }
