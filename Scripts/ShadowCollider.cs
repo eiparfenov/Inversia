@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PolygonCollider2D))]
+[RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshRenderer))]
 public class ShadowCollider : MonoBehaviour
 {
     private PolygonCollider2D _appliedPolygonCollider;
@@ -26,8 +28,6 @@ public class ShadowCollider : MonoBehaviour
             return _appliedPolygonCollider;
         }
     }
-
-    [SerializeField] private GameObject tempMarker;
     public void RecalculateShadow(Vector3[] meshVertexesPositions, Vector3 lightSourcePosition)
     {
         Vector3[] pointsProjections = ProjectPointsOnPlane(meshVertexesPositions, lightSourcePosition);
@@ -35,7 +35,6 @@ public class ShadowCollider : MonoBehaviour
         if (shadowPoints.Length >= 3)
         {
             UpdateCollider(shadowPoints);
-            TempDisplay(shadowPoints);
             UpdateMesh(shadowPoints);
         }
     }
@@ -132,7 +131,6 @@ public class ShadowCollider : MonoBehaviour
 
         AppliedPolygonCollider.SetPath(0, path);
     }
-
     private void UpdateMesh(Vector3[] points)
     {
         Vector3 center = Vector3.zero;
@@ -164,18 +162,6 @@ public class ShadowCollider : MonoBehaviour
         // Apply new mesh to mesh filter
 
         AppliedMeshFilter.mesh = newMesh;
-    }
-    private void TempDisplay(Vector3[] pointsToDisplay)
-    {
-        for (int childNumber = 0; childNumber < transform.childCount; childNumber++)
-        {
-            Destroy(transform.GetChild(childNumber).gameObject);
-        }
-
-        foreach (var point in pointsToDisplay)
-        {
-            Instantiate(tempMarker, point, Quaternion.identity, transform);
-        }
     }
 }
 class PairForConvexHull: IComparable
