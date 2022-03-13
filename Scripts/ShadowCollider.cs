@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -7,7 +9,8 @@ public class ShadowCollider : MonoBehaviour
     public void RecalculateShadow(Vector3[] meshVertexesPositions, Vector3 lightSourcePosition)
     {
         Vector3[] pointsProjections = ProjectPointsOnPlane(meshVertexesPositions, lightSourcePosition);
-        TempDisplay(pointsProjections);
+        Vector3[] shadowPoints = ConvexHull(pointsProjections);
+        TempDisplay(shadowPoints);
     }
 
     private Vector3[] ProjectPointsOnPlane(Vector3[] meshVertexesPositions, Vector3 lightSourcePosition)
@@ -31,6 +34,7 @@ public class ShadowCollider : MonoBehaviour
             Vector3 currentPoint = meshVertexesLocalPositions[i];
             Vector3 currentPointParallelProjection = currentPoint;
             currentPointParallelProjection.z = 0;
+            currentPointParallelProjection -= lightSourceParallelProjection;
 
             pointsOnPlane[i] = lightSourceParallelProjection + currentPointParallelProjection *
                 (lightSourceLocalPosition.z / (lightSourceLocalPosition.z - meshVertexesLocalPositions[i].z));
@@ -38,6 +42,60 @@ public class ShadowCollider : MonoBehaviour
 
         return pointsOnPlane;
     }
+    private Vector3[] ConvexHull(Vector3[] allPoints)
+        {
+            // Move left point to the top of the array
+            for (int i = 1; i < allPoints.Length; i++)
+            {
+                if (allPoints[i].x > allPoints[0].x)
+                {
+                    (allPoints[0], allPoints[i]) = (allPoints[i], allPoints[0]);
+                }
+            }
+            
+            // Create convex-hull data and sort points by angle
+            PairForConvexHull[] pointsInfo = new PairForConvexHull[allPoints.Length - 1];
+            for (int i = 1; i < allPoints.Length; i++)
+            {
+                float angle = Vector3.SignedAngle(Vector3.up, allPoints[i] - allPoints[0], Vector3.forward);
+                pointsInfo[i - 1] = new PairForConvexHull(angle, allPoints[i]);
+            }
+            Array.Sort(pointsInfo);
+            
+            // Create and fill queue and list with points
+            Queue<Vector3> points = new Queue<Vector3>();
+            List<Vector3> result = new List<Vector3>();
+
+            result.Add(allPoints[0]);
+            result.Add(pointsInfo[0].Point);
+
+            for (int i = 1; i < pointsInfo.Length; i++)
+            {
+                points.Enqueue(pointsInfo[i].Point);
+            }
+            
+            // Convex-hull algorithm
+            Vector3 nextPoint = points.Peek();
+            while(result.Count > 1)
+            {
+                float angle = Vector3.SignedAngle(result[result.Count - 1] - result[result.Count - 2], nextPoint - result[result.Count - 1], Vector3.forward);
+                if(angle < 0f)
+                {
+                    result.Add(nextPoint);
+                    if (points.Count != 0)
+                        nextPoint = points.Dequeue();
+                    else
+                        break;
+                }
+                else
+                {
+                    result.RemoveAt(result.Count - 1);
+                }
+            }
+            
+            return result.ToArray();
+
+        }
 
     private void TempDisplay(Vector3[] pointsToDisplay)
     {
@@ -52,4 +110,26 @@ public class ShadowCollider : MonoBehaviour
         }
     }
     
+}
+class PairForConvexHull: IComparable
+{
+    private float angle;
+    private Vector3 point;
+
+    public PairForConvexHull(float angle, Vector3 point)
+    {
+        this.angle = angle;
+        this.point = point;
+    }
+
+    public Vector3 Point { get => point; set => point = value; }
+    public float Angle { get => angle; set => angle = value; }
+
+    public int CompareTo(object obj)
+    {
+        if (((PairForConvexHull)obj).Angle < angle)
+            return -1;
+        else
+            return 1;
+    }
 }
