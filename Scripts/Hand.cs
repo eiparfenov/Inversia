@@ -14,6 +14,8 @@ public class Hand : MonoBehaviour
 
     [SerializeField] private List<Interactable> interactables = new List<Interactable>();
 
+    [SerializeField] private Interactable currentInteractable;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -26,16 +28,26 @@ public class Hand : MonoBehaviour
     {
         if (trigger.GetStateDown(controller.inputSource))
         {
-            Interactable interactable = GetClosest();
+            currentInteractable = GetClosest();
 
-            if (!interactable)
+            if (!currentInteractable)
                 return;
 
-            fixedJoint.connectedBody = interactable.GetComponent<Rigidbody>();
+            fixedJoint.connectedBody = currentInteractable.GetComponent<Rigidbody>();
+            currentInteractable.onVRDragStart();
+        }
+        if(currentInteractable)
+        {
+            currentInteractable.onVRDrag();
         }
         if (trigger.GetStateUp(controller.inputSource))
         {
             fixedJoint.connectedBody = null;
+            if(currentInteractable)
+            {
+                currentInteractable.onVRDragFinish();
+                currentInteractable = null;
+            }
         }
     }
 

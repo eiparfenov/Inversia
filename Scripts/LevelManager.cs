@@ -62,6 +62,7 @@ public class LevelManager : MonoBehaviour
         _currentLightSource.position = currentLevelData.LightSourcePosition;
         _currentLightSource.parent = _currentEnvironment.transform;
 
+        _currentBlocks.AddComponent<Rigidbody>().isKinematic = true;
         int childCount = _currentBlocks.transform.childCount;
         for (int i = 0; i < childCount; i++)
         {
