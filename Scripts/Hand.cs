@@ -60,6 +60,12 @@ public class Hand : MonoBehaviour
 
     private Interactable GetClosest()
     {
+        foreach (var interactable in interactables)
+        {
+            if (interactable == null)
+                interactables.Remove(interactable);
+        }
+
         if (interactables.Count == 0)
             return null;
 
