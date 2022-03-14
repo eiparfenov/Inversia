@@ -8,10 +8,9 @@ public class Ghost : MonoBehaviour
     private Rigidbody2D _rb;
     private float _horizontal;
     
-    public void Update()
+    public void SetHorizontalAxis(float axis)
     {
-        //temp
-        _horizontal = Input.GetAxis("Horizontal");
+        _horizontal = axis;
     }
 
     private void Start()

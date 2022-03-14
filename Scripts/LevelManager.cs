@@ -51,6 +51,7 @@ public class LevelManager : MonoBehaviour
 
         Vector3 startPosition = _currentEnvironment.GetComponentInChildren<LevelStart>().transform.position;
         _ghost =  Instantiate(ghost2DPref, startPosition, Quaternion.identity).GetComponent<Ghost>();
+        FindObjectOfType<GhostController>().AppliedGhost = _ghost;
         _currentEnvironment.GetComponentInChildren<LevelFinish>().onLevelFinished.AddListener(LevelFinishHandler);
     }
 
