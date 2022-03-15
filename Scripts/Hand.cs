@@ -53,7 +53,6 @@ public class Hand : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        print("Enter");
         Interactable interactable = other.gameObject.GetComponentInParent<Interactable>();
         if (interactable && !interactables.Contains(interactable))
         {
