@@ -22,6 +22,13 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject ghost3DPref;
     [SerializeField] private GameObject ghost2DPref;
 
+
+    public void LoadLevel(LevelData level)
+    {
+        currentLevelData = level;
+        ClearLevel();
+        StartCoroutine(LoadLevel());
+    }
     private void Start()
     {
         StartCoroutine(LoadLevel());
@@ -74,10 +81,13 @@ public class LevelManager : MonoBehaviour
 
     private void ClearLevel()
     {
-        Destroy(_currentLightSource.gameObject);
+        StopAllCoroutines();
+        if(_currentLightSource)
+            Destroy(_currentLightSource.gameObject);
         Destroy(_currentBlocks);
         Destroy(_currentEnvironment);
-        Destroy(_ghost.gameObject);
+        if(_ghost)
+            Destroy(_ghost.gameObject);
     }
 
     private void LevelFinishHandler()

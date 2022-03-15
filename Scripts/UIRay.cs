@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(LineRenderer))]
 public class UIRay : MonoBehaviour
@@ -17,17 +18,35 @@ public class UIRay : MonoBehaviour
 
     void Update()
     {
-        float lenght = maxDepth;
+        float lenght;
+        if (inputSystem.Data.pointerCurrentRaycast.distance == 0)
+        {
+            _lineRenderer.enabled = false;
+            dot.SetActive(false);
+        }
+        else
+        {
+            lenght = inputSystem.Data.pointerCurrentRaycast.distance;
 
-        RaycastHit hit;
-        Physics.Raycast(new Ray(transform.position, transform.forward), out hit, lenght);
+            RaycastHit hit;
+            Physics.Raycast(new Ray(transform.position, transform.forward), out hit, lenght);
 
-        Vector3 endPosition = transform.position + transform.forward * lenght;
-        if (hit.collider != null)
-            endPosition = hit.point;
+            Vector3 endPosition = transform.position + transform.forward * lenght;
+            if (hit.collider == null)
+            {
 
-        dot.transform.position = endPosition;
-        _lineRenderer.SetPosition(0, transform.position);
-        _lineRenderer.SetPosition(1, endPosition);
+                dot.SetActive(true);
+                dot.transform.position = endPosition;
+
+                _lineRenderer.enabled = true;
+                _lineRenderer.SetPosition(0, transform.position);
+                _lineRenderer.SetPosition(1, endPosition);
+            }
+            else
+            {
+                _lineRenderer.enabled = false;
+                dot.SetActive(false);
+            }
+        }
     }
 }

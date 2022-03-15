@@ -12,6 +12,7 @@ public class VRInputSystem : BaseInputModule
 
     private GameObject _currentObject;
     private PointerEventData _data;
+    public PointerEventData Data { get => _data; set => _data = value; }
 
     protected override void Awake()
     {
