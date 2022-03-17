@@ -71,10 +71,10 @@ public class Hand : MonoBehaviour
 
     private Interactable GetClosest()
     {
-        foreach (var interactable in interactables)
+        for (int i = 0; i < interactables.Count; i++)
         {
-            if (interactable == null)
-                interactables.Remove(interactable);
+            if (interactables[i] == null)
+                interactables.Remove(interactables[i]);
         }
 
         if (interactables.Count == 0)
