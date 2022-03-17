@@ -2,14 +2,17 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.VFX;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] private LevelData currentLevelData;
+    [SerializeField] private Levels allLevels;
+    private LevelData currentLevelData;
     private Ghost _ghost;
     private GameObject _currentEnvironment;
     private GameObject _currentBlocks;
     private Transform _currentLightSource;
+    private int _currentLevelId = 0;
 
     [Header("LevelLoadingOptions")] 
     [SerializeField] private float loadTime;
@@ -23,14 +26,16 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject ghost2DPref;
 
 
-    public void LoadLevel(LevelData level)
+    public void LoadLevel(int level)
     {
-        currentLevelData = level;
+        _currentLevelId = level;
+        currentLevelData = allLevels.GetLevel(level);
         ClearLevel();
         StartCoroutine(LoadLevel());
     }
     private void Start()
     {
+        currentLevelData = allLevels.GetLevel(_currentLevelId);
         StartCoroutine(LoadLevel());
     }
 
@@ -54,6 +59,20 @@ public class LevelManager : MonoBehaviour
         
         GameObject ghost3D = Instantiate(ghost3DPref, ghost3DSpawnField);
         yield return new WaitForSeconds(ghost3DTime);
+        GameObject ghostObj = ghost3D.transform.GetChild(0).gameObject;
+        GameObject vfxObj = ghost3D.transform.GetChild(1).gameObject;
+        vfxObj.SetActive(true);
+        vfxObj.GetComponent<VisualEffect>().Play();
+        float shrinkSpeed = 0.1f;
+        while (ghostObj.transform.localScale.x > 0.1f)
+        {
+            ghostObj.transform.localScale -= new Vector3(0.1f, 0.1f, 0.1f) * shrinkSpeed;
+            ghostObj.transform.position += new Vector3(0, 0.001f, 0);
+            yield return new WaitForSeconds(0.01f);
+        }
+        //yield return new WaitForSeconds(0.5f);
+        vfxObj.GetComponent<VisualEffect>().Stop();
+        yield return new WaitForSeconds(2f);
         Destroy(ghost3D);
 
         Vector3 startPosition = _currentEnvironment.GetComponentInChildren<LevelStart>().transform.position;
@@ -62,6 +81,9 @@ public class LevelManager : MonoBehaviour
         FindObjectOfType<GhostController>().AppliedGhost = _ghost;
         _currentEnvironment.GetComponentInChildren<LevelFinish>().onLevelFinished.AddListener(LevelFinishHandler);
     }
+
+
+   
 
     private void AddShadowCastingUnions()
     {
@@ -93,6 +115,8 @@ public class LevelManager : MonoBehaviour
     private void LevelFinishHandler()
     {
         ClearLevel();
+        _currentLevelId += 1;
+        currentLevelData = allLevels.GetLevel(_currentLevelId);
         StartCoroutine(LoadLevel());
     }
     private void GhostFallHandler()

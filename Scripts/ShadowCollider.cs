@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class ShadowCollider : MonoBehaviour
 {
+    [SerializeField] private Material shadowMaterial;
     private PolygonCollider2D _appliedPolygonCollider;
     private MeshFilter _appliedMeshFilter;
 
@@ -27,6 +28,11 @@ public class ShadowCollider : MonoBehaviour
                 _appliedPolygonCollider = GetComponent<PolygonCollider2D>();
             return _appliedPolygonCollider;
         }
+    }
+    private void Awake()
+    {
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer.material = new Material(Shader.Find("Shader Graphs/NeonShader"));
     }
     public void RecalculateShadow(Vector3[] meshVertexesPositions, Vector3 lightSourcePosition)
     {

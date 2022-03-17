@@ -4,7 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - tempMarker: {fileID: 4902414129484917482, guid: 5eac1639add15b74183d19c43c5e063c, type: 3}
+  - shadowMaterial: {fileID: 2100000, guid: 50676984d1229694a9f1c2d9b4a87f02, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

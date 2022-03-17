@@ -50,7 +50,7 @@
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/trackpad",
+      "name": "/actions/default/in/trackPad",
       "type": "vector2"
     },
     {

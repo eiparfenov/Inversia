@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: NeonNoiseMat
+  m_Shader: {fileID: -6465566751694194690, guid: da3a81592132aa54a9299c70c7d595d2, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_db7efc6b9e7648d2b310b7ea46bb3f0d:
+        m_Texture: {fileID: 2800000, guid: f61b377d9c969614ca62c76ae2095c4e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_f2fa296c666e4db78b5e44483a256c86: 1
+    m_Colors:
+    - Color_6a73d3a5a28c48b9a0ad1adf576fb5cf: {r: 0, g: 0.1115615, b: 1, a: 0}
+    - Color_94dcd4d300944a0baa9a51a93798f8c6: {r: 0, g: 0.9333333, b: 2, a: 0}
+    - Vector2_dc2ae1da43344270a583a0ecad4d7a3b: {r: 5, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []

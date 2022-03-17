@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class LoadLevelButton : MonoBehaviour, IPointerDownHandler
 {
-    [SerializeField] private LevelData level;
+    [SerializeField] private int level;
 
     private LevelManager _levelManager;
 
@@ -16,7 +16,6 @@ public class LoadLevelButton : MonoBehaviour, IPointerDownHandler
     }
     private void ClickHandler()
     {
-        print("CLICK!!!");
         _levelManager.LoadLevel(level);
     }
 

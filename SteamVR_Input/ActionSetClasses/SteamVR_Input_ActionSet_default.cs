@@ -105,11 +105,11 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Vector2 trackpad
+        public virtual SteamVR_Action_Vector2 trackPad
         {
             get
             {
-                return SteamVR_Actions.default_trackpad;
+                return SteamVR_Actions.default_trackPad;
             }
         }
         

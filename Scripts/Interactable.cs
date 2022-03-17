@@ -16,12 +16,10 @@ public class Interactable : MonoBehaviour
     [SerializeField] private Vector2 zAxisRange;
 
     [Header("Rotation")]
-    [SerializeField] private bool xRotationAllowed;
-    [SerializeField] private bool yRotationAllowed;
-    [SerializeField] private bool zRotationAllowed;
+    [SerializeField] private bool rotationAllowed;
+
 
     private Rigidbody _rb;
-    private Vector3 defaultRotation;
     public void onVRDragStart()
     {
         _rb.isKinematic = false;
@@ -44,7 +42,6 @@ public class Interactable : MonoBehaviour
 
     private void Start()
     {
-        defaultRotation = transform.rotation.eulerAngles;
         _rb = GetComponent<Rigidbody>();
         _rb.useGravity = false;
         _rb.isKinematic = true;
@@ -54,6 +51,8 @@ public class Interactable : MonoBehaviour
         if (!yMovementAllowed)
             _rb.constraints |= RigidbodyConstraints.FreezePositionY;
         if (!zMovementAllowed)
-            _rb.constraints |= RigidbodyConstraints.FreezePositionZ;        
+            _rb.constraints |= RigidbodyConstraints.FreezePositionZ;
+        if (!rotationAllowed)
+            _rb.constraints |= RigidbodyConstraints.FreezeRotation;
     }
 }
