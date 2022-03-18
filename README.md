@@ -47,10 +47,11 @@ VR-очки HTC Vive + контроллеры
 
 ## Контакты
 >Если интересно, то Егор отвечал за логику, Яна - за графику. Левел/геймдизайн - общая работа.
-### Парфенов Егор, ИНБО-01-20 &emsp; [![github](/readmeresources/github.png)][1]  [![vk](readmeresources/vk.png)][2]
+#### Парфенов Егор, ИНБО-01-20 &emsp; [![github](/readmeresources/github.png)][1]  [![vk](readmeresources/vk.png)][2]
 
-### Тришина Яна, ИНБО-11-20 &emsp; [![github](/readmeresources/github.png)][3]  [![vk](readmeresources/vk.png)][4]  
+#### Тришина Яна, ИНБО-11-20 &emsp; [![github](/readmeresources/github.png)][3]  [![vk](readmeresources/vk.png)][4]  
 ___
+PROJECT ORION  
 РТУ МИРЭА, ИИТ
 
 [1]: https://github.com/eiparfenov
