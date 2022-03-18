@@ -31,8 +31,8 @@ public class ShadowCollider : MonoBehaviour
     }
     private void Awake()
     {
-        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-        meshRenderer.material = new Material(Shader.Find("Shader Graphs/NeonShader"));
+        //MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        //meshRenderer.material = new Material(Shader.Find("Shader Graphs/NeonShader"));
     }
     public void RecalculateShadow(Vector3[] meshVertexesPositions, Vector3 lightSourcePosition)
     {

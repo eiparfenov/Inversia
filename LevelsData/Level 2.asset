@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 507806f31df747ef9d172729d69871e9, type: 3}
-  m_Name: new level
+  m_Name: Level 2
   m_EditorClassIdentifier: 
-  blocks: {fileID: 0}
-  environment: {fileID: 0}
-  lightSourcePosition: {x: 0, y: 0, z: 0}
+  blocks: {fileID: 8509151918375299353, guid: 28dbbeda0e2562c419816fe064c1cd28, type: 3}
+  environment: {fileID: 2809254039901013328, guid: 6d768e7bb7d0744449e93e4530e6477b, type: 3}
+  lightSourcePosition: {x: 0, y: 0, z: 1000}

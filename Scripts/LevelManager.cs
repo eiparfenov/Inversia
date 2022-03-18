@@ -12,6 +12,7 @@ public class LevelManager : MonoBehaviour
     private GameObject _currentEnvironment;
     private GameObject _currentBlocks;
     private Transform _currentLightSource;
+    private GameObject _current3DGhost;
     private int _currentLevelId = 0;
 
     [Header("LevelLoadingOptions")] 
@@ -57,10 +58,10 @@ public class LevelManager : MonoBehaviour
         _currentBlocks.transform.position = Vector3.zero;
         
         
-        GameObject ghost3D = Instantiate(ghost3DPref, ghost3DSpawnField);
+        _current3DGhost = Instantiate(ghost3DPref, ghost3DSpawnField);
         yield return new WaitForSeconds(ghost3DTime);
-        GameObject ghostObj = ghost3D.transform.GetChild(0).gameObject;
-        GameObject vfxObj = ghost3D.transform.GetChild(1).gameObject;
+        GameObject ghostObj = _current3DGhost.transform.GetChild(0).gameObject;
+        GameObject vfxObj = _current3DGhost.transform.GetChild(1).gameObject;
         vfxObj.SetActive(true);
         vfxObj.GetComponent<VisualEffect>().Play();
         float shrinkSpeed = 0.1f;
@@ -73,7 +74,7 @@ public class LevelManager : MonoBehaviour
         //yield return new WaitForSeconds(0.5f);
         vfxObj.GetComponent<VisualEffect>().Stop();
         yield return new WaitForSeconds(2f);
-        Destroy(ghost3D);
+        Destroy(_current3DGhost);
 
         Vector3 startPosition = _currentEnvironment.GetComponentInChildren<LevelStart>().transform.position;
         _ghost =  Instantiate(ghost2DPref, startPosition, Quaternion.identity).GetComponent<Ghost>();
@@ -81,9 +82,6 @@ public class LevelManager : MonoBehaviour
         FindObjectOfType<GhostController>().AppliedGhost = _ghost;
         _currentEnvironment.GetComponentInChildren<LevelFinish>().onLevelFinished.AddListener(LevelFinishHandler);
     }
-
-
-   
 
     private void AddShadowCastingUnions()
     {
@@ -108,6 +106,8 @@ public class LevelManager : MonoBehaviour
             Destroy(_currentLightSource.gameObject);
         Destroy(_currentBlocks);
         Destroy(_currentEnvironment);
+        if (_current3DGhost)
+            Destroy(_current3DGhost);
         if(_ghost)
             Destroy(_ghost.gameObject);
     }

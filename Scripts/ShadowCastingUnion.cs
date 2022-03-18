@@ -42,6 +42,8 @@ public class ShadowCastingUnion : MonoBehaviour
             GameObject shadowColliderGameObject = new GameObject("Shadow(" + childNumber + ")");
             shadowColliderGameObject.transform.parent = shadowCollidersParent.transform;
             ShadowCollider shadowCollider = shadowColliderGameObject.AddComponent<ShadowCollider>();
+            shadowCollider.GetComponent<MeshRenderer>().material =
+                child.GetChild(0).GetComponent<MeshRenderer>().material;
             
             childShadowCastingObject.AppliedShadowCollider = shadowCollider;
             childShadowCastingObject.LightSource = lightSource;
